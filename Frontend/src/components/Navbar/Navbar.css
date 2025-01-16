@@ -1,0 +1,33 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: black;
+  padding: 10px;
+  font-family: "Poppins", serif;
+  color: white;
+  overflow: hidden;
+  margin: 0px;
+}
+
+.navbar button {
+  background: transparent;
+  color: white;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.navbar img {
+  height: 100px;
+  width: 100px;
+  object-fit: cover;
+  cursor: pointer;
+  flex-shrink: 0;
+}
