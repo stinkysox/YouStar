@@ -19,7 +19,15 @@ const Login = () => {
     }
   }, [navigate, isAuthenticated]);
 
-  const handleLogin = async () => {
+  const handleLogin = async (e) => {
+    e.preventDefault(); // Prevent default form submit behavior
+
+    // Check if all fields are filled
+    if (!email || !password) {
+      alert("Please fill in all the required fields.");
+      return;
+    }
+
     try {
       const response = await axios.post("http://localhost:4000/login", {
         email,
@@ -41,7 +49,15 @@ const Login = () => {
   };
 
   // Handle user signup
-  const handleSignup = async () => {
+  const handleSignup = async (e) => {
+    e.preventDefault(); // Prevent default form submit behavior
+
+    // Check if all fields are filled
+    if (!username || !email || !password) {
+      alert("Please fill in all the required fields.");
+      return;
+    }
+
     try {
       const response = await axios.post("http://localhost:4000/createuser", {
         username,
@@ -79,12 +95,13 @@ const Login = () => {
       <div className="login-container">
         <div className="form-container">
           {!isLogin ? (
-            <div className="signup-form">
+            <form className="signup-form" onSubmit={handleSignup}>
               <input
                 type="text"
                 placeholder="Username"
                 className="input-field"
                 value={username}
+                required
                 onChange={(e) => setUsername(e.target.value)}
               />
               <input
@@ -92,26 +109,29 @@ const Login = () => {
                 placeholder="Email"
                 className="input-field"
                 value={email}
+                required
                 onChange={(e) => setEmail(e.target.value)}
               />
               <input
                 type="password"
                 placeholder="Password"
                 className="input-field"
+                required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-              <button className="submit-btn" onClick={handleSignup}>
+              <button className="submit-btn" type="submit">
                 Sign Up
               </button>
               <p className="toggle-link" onClick={() => setIsLogin(true)}>
                 Already have an account? Login
               </p>
-            </div>
+            </form>
           ) : (
-            <div className="login-form">
+            <form className="login-form" onSubmit={handleLogin}>
               <input
                 type="email"
+                required
                 placeholder="Email"
                 className="input-field"
                 value={email}
@@ -119,18 +139,19 @@ const Login = () => {
               />
               <input
                 type="password"
+                required
                 placeholder="Password"
                 className="input-field"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-              <button className="submit-btn" onClick={handleLogin}>
+              <button className="submit-btn" type="submit">
                 Login
               </button>
               <p className="toggle-link" onClick={() => setIsLogin(false)}>
                 Dont have an account? Sign Up
               </p>
-            </div>
+            </form>
           )}
         </div>
       </div>
