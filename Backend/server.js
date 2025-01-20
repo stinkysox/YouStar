@@ -1,20 +1,36 @@
 import express from "express";
+import mongoose from "mongoose";
 import cors from "cors";
+import dotenv from "dotenv";
 
+dotenv.config();
+import { connectDB } from "./config/db.js";
+import {
+  addToCart,
+  createUser,
+  getCartItems,
+  loginUser,
+} from "./controllers/userControllers.js";
 const app = express();
-const PORT = 3000;
+const port = process.env.PORT || 4000;
 
 app.use(cors());
 app.use(express.json());
+
+connectDB();
+
+// Routes
+
+app.post("/createuser", createUser);
+app.post("/login", loginUser);
+app.post("/addtocart", addToCart);
+
+app.post("/getitems", getCartItems);
 
 app.get("/", (req, res) => {
   res.json({ message: "Hello from the backend!" });
 });
 
-app.get("/login", (req, res) => {
-  res.json({ message: "welcome to login side" });
-});
-
-app.listen(PORT, () => {
-  console.log(`Backend is running on http://localhost:${PORT}`);
+app.listen(port, () => {
+  console.log(`Backend is running on http://localhost:${port}`);
 });
