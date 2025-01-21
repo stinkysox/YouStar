@@ -10,6 +10,8 @@ import {
   createUser,
   getCartItems,
   loginUser,
+  placeOrder,
+  removeItemFromCart,
 } from "./controllers/userControllers.js";
 const app = express();
 const port = process.env.PORT || 4000;
@@ -24,8 +26,9 @@ connectDB();
 app.post("/createuser", createUser);
 app.post("/login", loginUser);
 app.post("/addtocart", addToCart);
-
 app.post("/getitems", getCartItems);
+app.post("/removeitem", removeItemFromCart);
+app.post("/placeorder", placeOrder);
 
 app.get("/", (req, res) => {
   res.json({ message: "Hello from the backend!" });

@@ -1,47 +1,88 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useCallback } from "react";
 import { GlobalContext } from "../../context/GlobalContext";
 import axios from "axios";
 import "./Cart.css";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Navbar from "../../components/Navbar/Navbar";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion"; // Import motion from Framer Motion
 
 const Cart = () => {
-  const { cart, removeFromCart, user } = useContext(GlobalContext); // Access cart, removeFromCart, and user from context
-  const [cartItems, setCartItems] = useState([]); // Local state to store cart items from the API
+  const { user, setCart, cart } = useContext(GlobalContext); // Access user and cart from context
   const [error, setError] = useState(""); // State for error handling
   const [loading, setLoading] = useState(false); // State to manage loading state
   const navigate = useNavigate();
 
+  // Function to handle errors
+  const handleError = (err) => {
+    console.error(err);
+    setError(err.response?.data?.message || "An unexpected error occurred");
+    setLoading(false);
+  };
+
   // Function to fetch cart items from the API
-  const fetchCartItems = async () => {
+  const fetchCartItems = useCallback(async () => {
     if (!user || !user.userId) {
       setError("User not logged in");
       return;
     }
 
-    setLoading(true); // Start loading
+    setLoading(true);
     try {
-      // Sending userId as part of the request body in POST request
       const response = await axios.post("http://localhost:4000/getitems", {
         userId: user.userId,
       });
-      setCartItems(response.data.cart || []); // Set cart items from the API to the state
-      setError(""); // Clear any previous errors
+
+      setCart(response.data.cart || []); // Set cart from API response
+      setError("");
+      console.log(cart);
     } catch (err) {
-      console.error("Error fetching cart items:", err);
-      setError(err.response?.data?.message || "Failed to fetch cart items");
+      handleError(err); // Handle error
     } finally {
       setLoading(false); // Stop loading
     }
-  };
+  }, [user, setCart]);
 
-  // Fetch cart items when the component mounts or cart changes
+  // Function to remove an item from the cart
+  const handleRemoveFromCart = useCallback(
+    async (productId) => {
+      if (!user || !user.userId) {
+        setError("User not logged in");
+        return;
+      }
+
+      setLoading(true); // Start loading
+      try {
+        const response = await axios.post("http://localhost:4000/removeitem", {
+          userId: user.userId,
+          productId, // Pass the product ID to the backend
+        });
+
+        const updatedCart = response.data.cart || []; // Updated cart from backend
+
+        setCart(updatedCart); // Update the cart in context
+        localStorage.setItem("cart", JSON.stringify(updatedCart)); // Update localStorage
+
+        toast.success("Item Removed");
+        setError(""); // Clear any previous errors
+      } catch (err) {
+        handleError(err); // Handle error
+      } finally {
+        setLoading(false); // Stop loading
+      }
+    },
+    [user, setCart]
+  );
+
+  // Fetch cart items when the component mounts or user changes
   useEffect(() => {
     fetchCartItems();
-  }, [cart, user]); // Dependency array: fetch cart items when `cart` or `user` changes
+  }, [fetchCartItems]);
 
+  // Calculate the total price
   const calculateTotal = () => {
-    return cartItems
+    return cart
       .reduce((total, item) => total + item.price * item.quantity, 0)
       .toFixed(2);
   };
@@ -51,13 +92,32 @@ const Cart = () => {
       <Navbar />
       <div className="cart-container">
         {loading ? (
-          <p>Loading...</p>
-        ) : cartItems.length === 0 && !error ? (
-          <p>Your cart is empty</p>
+          <div className="loading-container-cart">
+            <p>Loading...</p>
+          </div>
+        ) : cart.length === 0 ? (
+          <div className="empty-container">
+            <img
+              src="https://i.postimg.cc/jd71nQ5y/Empty-Cart-Icon.jpg"
+              alt=""
+            />
+            <p>Your cart is empty</p>
+            <button onClick={() => navigate("/")}>Continue Shopping</button>
+          </div>
         ) : (
           <div className="cart-items">
-            {cartItems.map((item, index) => (
-              <div key={index} className="cart-item">
+            {cart.map((item, index) => (
+              <motion.div
+                key={index}
+                className="cart-item"
+                whileHover={{
+                  scale: 1.01, // Slightly scale up on hover
+                  boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)", // Add a shadow
+                }}
+                initial={{ opacity: 0, y: 20 }} // Initial position and opacity
+                animate={{ opacity: 1, y: 0 }} // Animate to visible
+                transition={{ duration: 0.4 }} // Smooth transition
+              >
                 <img
                   src={item.imageLink}
                   alt={item.name}
@@ -66,30 +126,34 @@ const Cart = () => {
                 <div className="cart-item-details">
                   <h3>{item.name}</h3>
                   <p>Quantity: {item.quantity}</p>
-
                   <p>Price: ${item.price}</p>
-                  <button
-                    onClick={() => removeFromCart(item.productId)} // Remove item by productId
+                  <motion.button
+                    whileHover={{
+                      scale: 1.1, // Button scales slightly on hover
+                    }}
                     className="remove-item-btn"
+                    onClick={() => handleRemoveFromCart(item.productId)} // Call backend API to remove item
                   >
-                    Remove from Cart
-                  </button>
+                    Remove Item
+                  </motion.button>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         )}
 
-        {/* Footer with total price and checkout button */}
-        {cartItems.length > 0 && (
+        {cart.length > 0 && (
           <div className="cart-footer">
             <h3>Total: ${calculateTotal()}</h3>
-            <button
+            <motion.button
+              whileHover={{
+                scale: 0.8, // Slightly scale up on hover
+              }}
               className="checkout-btn"
               onClick={() => navigate("/checkout")}
             >
               Proceed to Checkout
-            </button>
+            </motion.button>
           </div>
         )}
       </div>

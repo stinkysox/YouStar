@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { FaCartShopping } from "react-icons/fa6";
 import { RiLogoutCircleRFill } from "react-icons/ri";
 import { GlobalContext } from "../../context/GlobalContext";
+import { motion } from "framer-motion";
 import "./Navbar.css";
 
 const Navbar = () => {
@@ -18,17 +19,42 @@ const Navbar = () => {
     navigate("/login");
   };
 
+  // Animation variants
+  const navbarItemVariants = {
+    hidden: { y: -50, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: { duration: 0.6, ease: "easeOut" },
+    },
+  };
+
   return (
     <div className="navbar">
-      <img
+      <motion.img
         className="navbar-logo"
         src="https://i.postimg.cc/QtQfgDvd/30-Best-Greek-Logo-Design-Ideas-You-Should-Check.jpg"
         alt="YoungStar Logo"
         onClick={() => navigate("/")}
+        initial="hidden"
+        animate="visible"
+        variants={navbarItemVariants}
       />
-      <p>YoungStar</p>
+      <motion.p
+        initial="hidden"
+        animate="visible"
+        variants={navbarItemVariants}
+        className="navbar-title"
+      >
+        YoungStar
+      </motion.p>
 
-      <div className="navbar-actions">
+      <motion.div
+        className="navbar-actions"
+        initial="hidden"
+        animate="visible"
+        variants={navbarItemVariants}
+      >
         <button onClick={() => navigate("/cart")} className="cart-button">
           <FaCartShopping />
         </button>
@@ -40,7 +66,7 @@ const Navbar = () => {
             <RiLogoutCircleRFill />
           </button>
         )}
-      </div>
+      </motion.div>
 
       {/* Logout Confirmation Modal */}
       {showLogoutModal && (

@@ -2,6 +2,9 @@ import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import { GlobalContext } from "../../context/GlobalContext";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./Login.css";
 
 const Login = () => {
@@ -24,7 +27,7 @@ const Login = () => {
 
     // Check if all fields are filled
     if (!email || !password) {
-      alert("Please fill in all the required fields.");
+      toast.error("Please fill in all the required fields.");
       return;
     }
 
@@ -41,10 +44,12 @@ const Login = () => {
         setUser(result.user); // Optionally save user info in context
         navigate("/"); // Navigate to home page after successful login
       } else {
-        alert(result.message); // Show error message if login fails
+        toast.error(result.message); // Show error message if login fails
       }
     } catch (error) {
-      alert("Login failed: " + error.response?.data?.message || error.message);
+      toast.error(
+        "Login failed: " + (error.response?.data?.message || error.message)
+      );
     }
   };
 
@@ -54,7 +59,7 @@ const Login = () => {
 
     // Check if all fields are filled
     if (!username || !email || !password) {
-      alert("Please fill in all the required fields.");
+      toast.error("Please fill in all the required fields.");
       return;
     }
 
@@ -72,10 +77,12 @@ const Login = () => {
         setUser(result.user); // Optionally save user info in context
         navigate("/"); // Navigate to home page after successful signup
       } else {
-        alert(result.message); // Show error message if signup fails
+        toast.error(result.message); // Show error message if signup fails
       }
     } catch (error) {
-      alert("Signup failed: " + error.response?.data?.message || error.message);
+      toast.error(
+        "Signup failed: " + (error.response?.data?.message || error.message)
+      );
     }
   };
 
@@ -92,7 +99,12 @@ const Login = () => {
         </div>
       </nav>
 
-      <div className="login-container">
+      <motion.div
+        className="login-container"
+        initial={{ opacity: 0 }} // Initial opacity 0
+        animate={{ opacity: 1 }} // Animate opacity to 1
+        transition={{ duration: 1 }} // Slow transition duration
+      >
         <div className="form-container">
           {!isLogin ? (
             <form className="signup-form" onSubmit={handleSignup}>
@@ -149,12 +161,12 @@ const Login = () => {
                 Login
               </button>
               <p className="toggle-link" onClick={() => setIsLogin(false)}>
-                Dont have an account? Sign Up
+                Don&apos;t have an account? Sign Up
               </p>
             </form>
           )}
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };

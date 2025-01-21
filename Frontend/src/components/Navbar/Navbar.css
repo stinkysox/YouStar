@@ -3,7 +3,7 @@
   align-items: center;
   justify-content: space-between;
   background-color: black;
-  padding: 10px;
+  padding: 10px 28px;
   font-family: "Poppins", serif;
   color: white;
   overflow: hidden;
@@ -72,4 +72,16 @@
 .modal-actions button:hover {
   transform: translateY(-5px); /* Lift the button */
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Add shadow to make it look lifted */
+}
+
+.logout-button {
+  transition: all 0.8s ease;
+}
+
+.logout-button:hover {
+  color: red;
+}
+
+.logout-button:active {
+  color: darkred; /* Change to a darker shade when clicked */
 }

@@ -168,10 +168,82 @@ export const getCartItems = async (req, res) => {
       return res.status(404).json({ message: "Cart is empty" });
     }
 
-    // Respond with the cart items
     res.status(200).json({ cart: user.cart });
   } catch (error) {
     console.error("Error fetching cart items:", error);
     res.status(500).json({ message: "Failed to fetch cart items" });
+  }
+};
+
+export const removeItemFromCart = async (req, res) => {
+  const { userId, productId } = req.body;
+
+  if (!userId || !productId) {
+    return res
+      .status(400)
+      .json({ message: "User ID and Product ID are required" });
+  }
+
+  try {
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    await User.updateOne({ _id: userId }, { $pull: { cart: { productId } } });
+
+    const updatedUser = await User.findById(userId);
+
+    res
+      .status(200)
+      .json({ message: "Item removed from cart", cart: updatedUser.cart });
+  } catch (error) {
+    console.error("Error removing item from cart:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const placeOrder = async (req, res) => {
+  const { orderData } = req.body;
+
+  try {
+    // Destructure the orderData object
+    const { userId, productIds, shippingAddress, paymentDetails } = orderData;
+
+    // Find the user by their ID
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Create the order object with only the necessary data
+    const order = {
+      userId,
+      productIds, // The array of product IDs
+      shippingAddress, // The shipping address
+      paymentDetails, // The payment details (card number, expiration, CVV)
+      totalPrice: orderData.totalPrice, // Total price (sent from the frontend)
+      date: new Date(), // Order date
+    };
+
+    // Add the order to the user's orders array
+    user.orders.push(order);
+
+    // Clear the user's cart after placing the order
+    user.cart = [];
+
+    // Save the updated user with the new order and cleared cart
+    await user.save();
+
+    // Respond with a success message and the updated orders array
+    res.status(200).json({
+      message: "Order placed successfully",
+      orders: user.orders, // Return the updated orders array
+    });
+  } catch (error) {
+    console.error("Error placing order:", error);
+    res.status(500).json({ message: "Failed to place the order" });
   }
 };
