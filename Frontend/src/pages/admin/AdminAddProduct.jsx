@@ -27,7 +27,7 @@ const AdminAddProduct = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:4000/addproducts",
+        "https://youstar-d5y4.onrender.com/addproducts",
         product
       );
       setSuccess(response.data.message || "Product added successfully!");
