@@ -27,13 +27,10 @@ const Login = () => {
     e.preventDefault();
     setLoading(true); // Show loader
     try {
-      const response = await axios.post(
-        "https://youstar-q4sg.onrender.com/login",
-        {
-          email,
-          password,
-        }
-      );
+      const response = await axios.post("http://localhost:4000/login", {
+        email,
+        password,
+      });
       const result = response.data;
 
       if (response.status === 200) {
@@ -56,14 +53,11 @@ const Login = () => {
     e.preventDefault();
     setLoading(true); // Show loader
     try {
-      const response = await axios.post(
-        "https://youstar-q4sg.onrender.com/createuser",
-        {
-          username,
-          email,
-          password,
-        }
-      );
+      const response = await axios.post("http://localhost:4000/createuser", {
+        username,
+        email,
+        password,
+      });
       const result = response.data;
 
       if (response.status === 201) {

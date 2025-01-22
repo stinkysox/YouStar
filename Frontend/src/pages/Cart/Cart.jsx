@@ -30,12 +30,9 @@ const Cart = () => {
 
     setLoading(true);
     try {
-      const response = await axios.post(
-        "https://youstar-q4sg.onrender.com/getitems",
-        {
-          userId: user.userId,
-        }
-      );
+      const response = await axios.post("http://localhost:4000/getitems", {
+        userId: user.userId,
+      });
 
       setCart(response.data.cart || []); // Set cart from API response
       setError("");
@@ -57,13 +54,10 @@ const Cart = () => {
 
     setLoading(true); // Start loading
     try {
-      const response = await axios.post(
-        "https://youstar-q4sg.onrender.com/removeitem",
-        {
-          userId: user.userId,
-          productId, // Pass the product ID to the backend
-        }
-      );
+      const response = await axios.post("http://localhost:4000/removeitem", {
+        userId: user.userId,
+        productId, // Pass the product ID to the backend
+      });
 
       const updatedCart = response.data.cart || []; // Updated cart from backend
 
