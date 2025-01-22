@@ -1,5 +1,5 @@
-import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import AdminAddProduct from "./pages/admin/AdminAddProduct";
 import Home from "./pages/Home/Home";
 import Products from "./pages/Products/Products";
 import Login from "./pages/Login/Login";
@@ -15,6 +15,8 @@ const App = () => {
       <Router>
         <Routes>
           <Route path="/login" element={<Login />} />
+
+          <Route path="/admin/add-product" element={<AdminAddProduct />} />
 
           <Route
             path="/"
