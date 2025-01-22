@@ -68,7 +68,7 @@ const Checkout = () => {
       setOrderPlaced(true); // Set orderPlaced to true to trigger the confirmation message
     } catch (error) {
       console.log(error);
-      alert("Error placing the order. Please try again.");
+      alert("Error placing the order. Please try again!.");
     }
   };
 
@@ -208,6 +208,7 @@ const Checkout = () => {
             <img
               src="https://i.postimg.cc/vH9zHsLb/download-8.jpg"
               className="cat"
+              alt="cat-image-cute"
             />
           </div>
         )}
