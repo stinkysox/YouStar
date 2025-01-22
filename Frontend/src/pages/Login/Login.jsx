@@ -4,6 +4,7 @@ import { GlobalContext } from "../../context/GlobalContext";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
+import { ThreeDots } from "react-loader-spinner"; // Import dots loader
 import "react-toastify/dist/ReactToastify.css";
 import "./Login.css";
 
@@ -12,82 +13,83 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { saveToken, setUser, isAuthenticated } = useContext(GlobalContext); // Get context methods
+  const [loading, setLoading] = useState(false); // State to track loading
+  const { saveToken, setUser, isAuthenticated } = useContext(GlobalContext);
   const navigate = useNavigate();
 
-  // Redirect if the user is already authenticated
   useEffect(() => {
     if (isAuthenticated()) {
-      navigate("/"); // Redirect to home if user is logged in
+      navigate("/");
     }
   }, [navigate, isAuthenticated]);
 
   const handleLogin = async (e) => {
-    e.preventDefault(); // Prevent default form submit behavior
-
-    // Check if all fields are filled
-    if (!email || !password) {
-      toast.error("Please fill in all the required fields.");
-      return;
-    }
-
+    e.preventDefault();
+    setLoading(true); // Show loader
     try {
       const response = await axios.post("http://localhost:4000/login", {
         email,
         password,
       });
-
       const result = response.data;
 
       if (response.status === 200) {
-        saveToken(result.token); // Save the token in context
-        setUser(result.user); // Optionally save user info in context
-        navigate("/"); // Navigate to home page after successful login
+        saveToken(result.token);
+        setUser(result.user);
+        navigate("/");
       } else {
-        toast.error(result.message); // Show error message if login fails
+        toast.error(result.message);
       }
     } catch (error) {
       toast.error(
         "Login failed: " + (error.response?.data?.message || error.message)
       );
+    } finally {
+      setLoading(false); // Hide loader
     }
   };
 
-  // Handle user signup
   const handleSignup = async (e) => {
-    e.preventDefault(); // Prevent default form submit behavior
-
-    // Check if all fields are filled
-    if (!username || !email || !password) {
-      toast.error("Please fill in all the required fields.");
-      return;
-    }
-
+    e.preventDefault();
+    setLoading(true); // Show loader
     try {
       const response = await axios.post("http://localhost:4000/createuser", {
         username,
         email,
         password,
       });
-
       const result = response.data;
 
       if (response.status === 201) {
-        saveToken(result.token); // Save the token in context
-        setUser(result.user); // Optionally save user info in context
-        navigate("/"); // Navigate to home page after successful signup
+        saveToken(result.token);
+        setUser(result.user);
+        navigate("/");
       } else {
-        toast.error(result.message); // Show error message if signup fails
+        toast.error(result.message);
       }
     } catch (error) {
       toast.error(
         "Signup failed: " + (error.response?.data?.message || error.message)
       );
+    } finally {
+      setLoading(false); // Hide loader
     }
   };
 
   return (
     <div className="login-background-contianer">
+      {loading && (
+        <div className="loader-container">
+          <ThreeDots
+            height="80"
+            width="80"
+            radius="9"
+            color="gray"
+            ariaLabel="three-dots-loading"
+            visible={true}
+          />
+        </div>
+      )}
       <nav className="navbar-login">
         <div className="navbar-content-login">
           <img
@@ -101,9 +103,9 @@ const Login = () => {
 
       <motion.div
         className="login-container"
-        initial={{ opacity: 0 }} // Initial opacity 0
-        animate={{ opacity: 1 }} // Animate opacity to 1
-        transition={{ duration: 1 }} // Slow transition duration
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }}
       >
         <div className="form-container">
           {!isLogin ? (

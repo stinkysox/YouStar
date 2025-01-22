@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 import "./Navbar.css";
 
 const Navbar = () => {
-  const { isAuthenticated, logout } = useContext(GlobalContext);
+  const { isAuthenticated, logout, setCart } = useContext(GlobalContext);
   const isLogged = isAuthenticated();
   const navigate = useNavigate();
 

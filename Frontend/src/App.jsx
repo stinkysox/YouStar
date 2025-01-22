@@ -11,48 +11,50 @@ import "./App.css";
 
 const App = () => {
   return (
-    <Router>
-      <Routes>
-        <Route path="/login" element={<Login />} />
+    <div className="app">
+      <Router>
+        <Routes>
+          <Route path="/login" element={<Login />} />
 
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute>
-              <Home /> {/* Home is protected */}
-            </ProtectedRoute>
-          }
-        />
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <Home /> {/* Home is protected */}
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="/checkout"
-          element={
-            <ProtectedRoute>
-              <Checkout />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/products/:category"
-          element={
-            <ProtectedRoute>
-              <Products /> {/* Products is protected */}
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/cart"
-          element={
-            <ProtectedRoute>
-              <Cart /> {/* Cart is protected */}
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
+          <Route
+            path="/checkout"
+            element={
+              <ProtectedRoute>
+                <Checkout />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/products/:category"
+            element={
+              <ProtectedRoute>
+                <Products /> {/* Products is protected */}
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/cart"
+            element={
+              <ProtectedRoute>
+                <Cart /> {/* Cart is protected */}
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
 
-      {/* Add ToastContainer here */}
-      <ToastContainer />
-    </Router>
+        {/* Add ToastContainer here */}
+        <ToastContainer />
+      </Router>
+    </div>
   );
 };
 

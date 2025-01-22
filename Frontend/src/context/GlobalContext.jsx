@@ -5,9 +5,13 @@ export const GlobalContext = createContext();
 
 // eslint-disable-next-line react/prop-types
 export const GlobalProvider = ({ children }) => {
-  const [cart, setCart] = useState(
-    JSON.parse(localStorage.getItem("cart")) || []
-  );
+  const [cart, setCart] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem("cart")) || [];
+    } catch {
+      return [];
+    }
+  });
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem("token") || null);
 
@@ -20,7 +24,7 @@ export const GlobalProvider = ({ children }) => {
     if (!token) return false;
     try {
       const decoded = jwtDecode(token);
-      return decoded.exp > Date.now() / 1000;
+      return decoded?.exp && decoded.exp > Date.now() / 1000;
     } catch (e) {
       return false;
     }
@@ -31,20 +35,23 @@ export const GlobalProvider = ({ children }) => {
     setUser(null);
     localStorage.removeItem("token");
     localStorage.removeItem("cart");
+    setCart([]);
   };
 
   useEffect(() => {
-    if (isAuthenticated()) {
+    if (token && isAuthenticated()) {
       const decoded = jwtDecode(token);
       setUser(decoded);
-    } else {
-      logout();
+    } else if (token) {
+      logout(); // Token is invalid
     }
   }, [token]);
 
   useEffect(() => {
     if (cart.length > 0) {
       localStorage.setItem("cart", JSON.stringify(cart));
+    } else {
+      localStorage.removeItem("cart");
     }
   }, [cart]);
 

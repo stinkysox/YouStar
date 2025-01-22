@@ -6,6 +6,8 @@ import dotenv from "dotenv";
 dotenv.config();
 import { connectDB } from "./config/db.js";
 import {
+  addProducts,
+  getAllProducts,
   addToCart,
   createUser,
   getCartItems,
@@ -29,6 +31,8 @@ app.post("/addtocart", addToCart);
 app.post("/getitems", getCartItems);
 app.post("/removeitem", removeItemFromCart);
 app.post("/placeorder", placeOrder);
+app.post("/addproducts", addProducts);
+app.get("/getallproducts", getAllProducts);
 
 app.get("/", (req, res) => {
   res.json({ message: "Hello from the backend!" });

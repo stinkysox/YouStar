@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
+import Product from "../models/productsModel.js";
 
 // Controller to register a new user
 export const createUser = async (req, res) => {
@@ -81,7 +82,7 @@ export const loginUser = async (req, res) => {
     const token = jwt.sign(
       { userId: user._id },
       process.env.JWT_SECRET || "your_jwt_secret_key",
-      { expiresIn: "1h" }
+      { expiresIn: "3h" }
     );
 
     // Send success response with token and user details
@@ -105,6 +106,7 @@ export const loginUser = async (req, res) => {
 
 export const addToCart = async (req, res) => {
   const { userId, product } = req.body;
+  console.log(product._id);
 
   try {
     // Find the user by their ID
@@ -115,9 +117,7 @@ export const addToCart = async (req, res) => {
     }
 
     // Check if the product is already in the cart (to avoid duplicates)
-    const productExists = user.cart.some(
-      (item) => item.productId === product.id
-    );
+    const productExists = user.cart.some((item) => item._id === product._id);
 
     if (productExists) {
       return res
@@ -126,10 +126,10 @@ export const addToCart = async (req, res) => {
     } else {
       // If the product doesn't exist in the cart, add it
       user.cart.push({
-        productId: product.id,
+        productId: product._id,
         name: product.name,
         price: product.price,
-        imageLink: product.image,
+        image: product.image,
         quantity: 1,
       });
     }
@@ -156,14 +156,12 @@ export const getCartItems = async (req, res) => {
   }
 
   try {
-    // Find the user by userId and fetch the cart
     const user = await User.findById(userId);
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Check if the cart is empty
     if (user.cart.length === 0) {
       return res.status(404).json({ message: "Cart is empty" });
     }
@@ -177,6 +175,7 @@ export const getCartItems = async (req, res) => {
 
 export const removeItemFromCart = async (req, res) => {
   const { userId, productId } = req.body;
+  console.log(userId, productId);
 
   if (!userId || !productId) {
     return res
@@ -206,10 +205,11 @@ export const removeItemFromCart = async (req, res) => {
 
 export const placeOrder = async (req, res) => {
   const { orderData } = req.body;
+  console.log(orderData);
 
   try {
     // Destructure the orderData object
-    const { userId, productIds, shippingAddress, paymentDetails } = orderData;
+    const { userId, products, shippingAddress, paymentDetails } = orderData;
 
     // Find the user by their ID
     const user = await User.findById(userId);
@@ -221,7 +221,7 @@ export const placeOrder = async (req, res) => {
     // Create the order object with only the necessary data
     const order = {
       userId,
-      productIds, // The array of product IDs
+      products, // The array of product IDs
       shippingAddress, // The shipping address
       paymentDetails, // The payment details (card number, expiration, CVV)
       totalPrice: orderData.totalPrice, // Total price (sent from the frontend)
@@ -245,5 +245,48 @@ export const placeOrder = async (req, res) => {
   } catch (error) {
     console.error("Error placing order:", error);
     res.status(500).json({ message: "Failed to place the order" });
+  }
+};
+
+export const addProducts = async (req, res) => {
+  try {
+    const productsArray = req.body; // Get the array of products from the request body
+
+    // Insert the products into the database and wait for the response
+    const savedProducts = await Product.insertMany(productsArray);
+
+    // Return a success response with the saved products
+    res.status(200).json({
+      success: true,
+      message: "Products added successfully",
+      products: savedProducts,
+    });
+  } catch (error) {
+    // Return an error response if something goes wrong
+    res.status(500).json({
+      success: false,
+      message: "Error saving products",
+      error: error.message,
+    });
+  }
+};
+
+export const getAllProducts = async (req, res) => {
+  try {
+    // Fetch all products from the database
+    const products = await Product.find();
+
+    // Return the fetched products as a response
+    res.status(200).json({
+      success: true,
+      products: products,
+    });
+  } catch (error) {
+    // Return an error response if something goes wrong
+    res.status(500).json({
+      success: false,
+      message: "Error fetching products",
+      error: error.message,
+    });
   }
 };

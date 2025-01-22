@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useCallback } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { GlobalContext } from "../../context/GlobalContext";
 import axios from "axios";
 import "./Cart.css";
@@ -22,7 +22,7 @@ const Cart = () => {
   };
 
   // Function to fetch cart items from the API
-  const fetchCartItems = useCallback(async () => {
+  const fetchCartItems = async () => {
     if (!user || !user.userId) {
       setError("User not logged in");
       return;
@@ -42,43 +42,40 @@ const Cart = () => {
     } finally {
       setLoading(false); // Stop loading
     }
-  }, [user, setCart]);
+  };
 
   // Function to remove an item from the cart
-  const handleRemoveFromCart = useCallback(
-    async (productId) => {
-      if (!user || !user.userId) {
-        setError("User not logged in");
-        return;
-      }
+  const handleRemoveFromCart = async (productId) => {
+    console.log("Hello");
+    if (!user || !user.userId) {
+      setError("User not logged in");
+      return;
+    }
 
-      setLoading(true); // Start loading
-      try {
-        const response = await axios.post("http://localhost:4000/removeitem", {
-          userId: user.userId,
-          productId, // Pass the product ID to the backend
-        });
+    setLoading(true); // Start loading
+    try {
+      const response = await axios.post("http://localhost:4000/removeitem", {
+        userId: user.userId,
+        productId, // Pass the product ID to the backend
+      });
 
-        const updatedCart = response.data.cart || []; // Updated cart from backend
+      const updatedCart = response.data.cart || []; // Updated cart from backend
 
-        setCart(updatedCart); // Update the cart in context
-        localStorage.setItem("cart", JSON.stringify(updatedCart)); // Update localStorage
+      setCart(updatedCart); // Update the cart in context
+      localStorage.setItem("cart", JSON.stringify(updatedCart)); // Update localStorage
 
-        toast.success("Item Removed");
-        setError(""); // Clear any previous errors
-      } catch (err) {
-        handleError(err); // Handle error
-      } finally {
-        setLoading(false); // Stop loading
-      }
-    },
-    [user, setCart]
-  );
+      toast.success("Item Removed");
+      setError(""); // Clear any previous errors
+    } catch (err) {
+      handleError(err); // Handle error
+    } finally {
+      setLoading(false); // Stop loading
+    }
+  };
 
-  // Fetch cart items when the component mounts or user changes
   useEffect(() => {
     fetchCartItems();
-  }, [fetchCartItems]);
+  }, [user, setCart]);
 
   // Calculate the total price
   const calculateTotal = () => {
@@ -99,7 +96,7 @@ const Cart = () => {
           <div className="empty-container">
             <img
               src="https://i.postimg.cc/jd71nQ5y/Empty-Cart-Icon.jpg"
-              alt=""
+              alt="Empty Cart"
             />
             <p>Your cart is empty</p>
             <button onClick={() => navigate("/")}>Continue Shopping</button>
@@ -119,14 +116,14 @@ const Cart = () => {
                 transition={{ duration: 0.4 }} // Smooth transition
               >
                 <img
-                  src={item.imageLink}
+                  src={item.image}
                   alt={item.name}
                   className="cart-item-image"
                 />
                 <div className="cart-item-details">
                   <h3>{item.name}</h3>
                   <p>Quantity: {item.quantity}</p>
-                  <p>Price: ${item.price}</p>
+                  <p>Price: ₹{item.price}</p>
                   <motion.button
                     whileHover={{
                       scale: 1.1, // Button scales slightly on hover
@@ -144,10 +141,10 @@ const Cart = () => {
 
         {cart.length > 0 && (
           <div className="cart-footer">
-            <h3>Total: ${calculateTotal()}</h3>
+            <h3>Total: ₹{calculateTotal()}</h3>
             <motion.button
               whileHover={{
-                scale: 0.8, // Slightly scale up on hover
+                scale: 1.1, // Slightly scale up on hover
               }}
               className="checkout-btn"
               onClick={() => navigate("/checkout")}

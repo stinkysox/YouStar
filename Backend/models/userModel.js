@@ -15,16 +15,10 @@ const orderSchema = new mongoose.Schema(
     },
     products: [
       {
-        productId: {
-          type: String,
-          required: true, // productId will be required
-        },
-        quantity: {
-          type: Number,
-          required: true,
-        },
+        type: String,
+        required: true, // Each entry in products is a productId
       },
-    ], // Array of products with their productIds and quantities
+    ], // Array of productIds
     shippingAddress: {
       type: String,
       required: true, // Shipping address will be required
