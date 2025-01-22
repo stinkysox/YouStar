@@ -1,16 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import axios from "axios";
-import { useState } from "react";
 import "./AdminAddProduct.css";
 
 const AdminAddProduct = () => {
   const [product, setProduct] = useState({
     name: "",
     price: "",
-    gender: "male", // default gender
-    category: "",
+    gender: "male", // Default gender
+    category: "clothes", // Default category
     image: "",
-    description: "",
   });
 
   const [error, setError] = useState("");
@@ -22,57 +20,31 @@ const AdminAddProduct = () => {
     setProduct({ ...product, [name]: value });
   };
 
-  // Handle file input
-  const handleFileChange = (e) => {
-    setProduct({ ...product, image: e.target.files[0] });
-  };
-
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validation (optional)
-    if (
-      !product.name ||
-      !product.price ||
-      !product.category ||
-      !product.image
-    ) {
-      setError("All fields are required!");
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append("name", product.name);
-    formData.append("price", product.price);
-    formData.append("gender", product.gender);
-    formData.append("category", product.category);
-    formData.append("description", product.description);
-    formData.append("image", product.image);
+    console.log(product);
 
     try {
-      // API request to add the product
       const response = await axios.post(
-        "http://localhost:5000/api/products/add",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
+        "http://localhost:4000/addproducts",
+        product
       );
-      setSuccess(response.data.message);
+      setSuccess(response.data.message || "Product added successfully!");
+      setError("");
+
       setProduct({
         name: "",
         price: "",
         gender: "male",
-        category: "",
+        category: "clothes",
         image: "",
         description: "",
       });
-      setError("");
     } catch (err) {
-      setError("Error adding product: " + err.response.data.message);
+      setError(
+        err.response?.data?.message || "Something went wrong. Please try again."
+      );
       setSuccess("");
     }
   };
@@ -80,13 +52,14 @@ const AdminAddProduct = () => {
   return (
     <div className="admin-add-product-container">
       <h2 className="admin-add-product-title">Add Product</h2>
+
       {error && <p className="admin-add-product-error">{error}</p>}
       {success && <p className="admin-add-product-success">{success}</p>}
 
       <form className="admin-add-product-form" onSubmit={handleSubmit}>
         <div className="admin-add-product-form-group">
           <label className="admin-add-product-label" htmlFor="name">
-            Product Name
+            Product Name <span className="required">*</span>
           </label>
           <input
             type="text"
@@ -96,12 +69,13 @@ const AdminAddProduct = () => {
             onChange={handleInputChange}
             className="admin-add-product-input"
             placeholder="Enter product name"
+            required
           />
         </div>
 
         <div className="admin-add-product-form-group">
           <label className="admin-add-product-label" htmlFor="price">
-            Price
+            Price <span className="required">*</span>
           </label>
           <input
             type="number"
@@ -111,12 +85,13 @@ const AdminAddProduct = () => {
             onChange={handleInputChange}
             className="admin-add-product-input"
             placeholder="Enter product price"
+            required
           />
         </div>
 
         <div className="admin-add-product-form-group">
           <label className="admin-add-product-label" htmlFor="gender">
-            Gender
+            Gender <span className="required">*</span>
           </label>
           <select
             id="gender"
@@ -133,44 +108,41 @@ const AdminAddProduct = () => {
 
         <div className="admin-add-product-form-group">
           <label className="admin-add-product-label" htmlFor="category">
-            Category
+            Category <span className="required">*</span>
           </label>
-          <input
-            type="text"
+          <select
             id="category"
             name="category"
             value={product.category}
             onChange={handleInputChange}
             className="admin-add-product-input"
-            placeholder="Enter product category"
-          />
+          >
+            <option value="clothes">Clothes</option>
+            <option value="watches">Watches</option>
+            <option value="footwear">Footwear</option>
+            <option value="accessories">Accessories</option>
+          </select>
         </div>
 
         <div className="admin-add-product-form-group">
           <label className="admin-add-product-label" htmlFor="description">
             Description
           </label>
-          <textarea
-            id="description"
-            name="description"
-            value={product.description}
-            onChange={handleInputChange}
-            className="admin-add-product-input"
-            placeholder="Enter product description"
-          ></textarea>
         </div>
 
         <div className="admin-add-product-form-group">
           <label className="admin-add-product-label" htmlFor="image">
-            Product Image
+            Product Image URL <span className="required">*</span>
           </label>
           <input
-            type="file"
+            type="text"
             id="image"
             name="image"
-            onChange={handleFileChange}
-            accept="image/*"
+            value={product.image}
+            onChange={handleInputChange}
             className="admin-add-product-input"
+            placeholder="Enter image URL"
+            required
           />
         </div>
 

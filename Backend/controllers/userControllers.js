@@ -292,3 +292,10 @@ export const getAllProducts = async (req, res) => {
     });
   }
 };
+
+export const addSingleProduct = async (req, res) => {
+  const { product } = req.body;
+  res.status(200).send({ product });
+};
+
+// Export the function

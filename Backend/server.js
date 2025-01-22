@@ -14,6 +14,7 @@ import {
   loginUser,
   placeOrder,
   removeItemFromCart,
+  addSingleProduct,
 } from "./controllers/userControllers.js";
 const app = express();
 const port = process.env.PORT || 4000;
@@ -33,6 +34,7 @@ app.post("/removeitem", removeItemFromCart);
 app.post("/placeorder", placeOrder);
 app.post("/addproducts", addProducts);
 app.get("/getallproducts", getAllProducts);
+app.post("/addproduct", addSingleProduct);
 
 app.get("/", (req, res) => {
   res.json({ message: "Hello from the backend!" });
