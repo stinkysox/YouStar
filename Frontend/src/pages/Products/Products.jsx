@@ -19,7 +19,7 @@ const Products = () => {
     const fetchProducts = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:4000/getallproducts"
+          "https://youstar-q4sg.onrender.com/getallproducts"
         );
         setProducts(response.data.products);
         setLoading(false);
@@ -42,10 +42,13 @@ const Products = () => {
     console.log(product);
 
     try {
-      const response = await axios.post("http://localhost:4000/addtocart", {
-        userId: userId,
-        product: product,
-      });
+      const response = await axios.post(
+        "https://youstar-q4sg.onrender.com/addtocart",
+        {
+          userId: userId,
+          product: product,
+        }
+      );
       setCart(response.data.cart);
       console.log("Updated Cart:", response.data.cart);
     } catch (error) {

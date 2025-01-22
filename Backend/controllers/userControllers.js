@@ -117,7 +117,9 @@ export const addToCart = async (req, res) => {
     }
 
     // Check if the product is already in the cart (to avoid duplicates)
-    const productExists = user.cart.some((item) => item._id === product._id);
+    const productExists = user.cart.some(
+      (item) => item.productId === product.productId
+    );
 
     if (productExists) {
       return res
