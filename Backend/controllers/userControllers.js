@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt";
+import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
 import Product from "../models/productsModel.js";
@@ -24,7 +24,7 @@ export const createUser = async (req, res) => {
 
     // Hash the password
     const saltRounds = 10;
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    const hashedPassword = await bcryptjs.hash(password, saltRounds);
 
     // Create a new user instance
     const newUser = new User({
@@ -73,7 +73,7 @@ export const loginUser = async (req, res) => {
     }
 
     // Compare the entered password with the stored hashed password
-    const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch = await bcryptjs.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({ message: "Incorrect password!" });
     }
