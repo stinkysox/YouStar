@@ -57,9 +57,12 @@ const Checkout = () => {
     };
 
     try {
-      const response = await axios.post("http://localhost:4000/placeorder", {
-        orderData,
-      });
+      const response = await axios.post(
+        "https://youstar-d5y4.onrender.com/placeorder",
+        {
+          orderData,
+        }
+      );
 
       console.log(response);
 

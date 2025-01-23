@@ -8,6 +8,7 @@ import Navbar from "../../components/Navbar/Navbar";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion"; // Import motion from Framer Motion
 import Footer from "../../components/Footer/Footer";
+import { DotLoader } from "react-spinners";
 
 const Cart = () => {
   const { user, setCart, cart } = useContext(GlobalContext); // Access user and cart from context
@@ -96,8 +97,8 @@ const Cart = () => {
       <Navbar />
       <div className="cart-container">
         {loading ? (
-          <div className="loading-container-cart">
-            <p>Loading...</p>
+          <div className="loader-container">
+            <DotLoader color="#888" size={50} />
           </div>
         ) : cart.length === 0 ? (
           <div className="empty-container">
