@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Navbar from "../../components/Navbar/Navbar";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion"; // Import motion from Framer Motion
+import Footer from "../../components/Footer/Footer";
 
 const Cart = () => {
   const { user, setCart, cart } = useContext(GlobalContext); // Access user and cart from context
@@ -132,7 +133,7 @@ const Cart = () => {
                   <p>Price: ₹{item.price}</p>
                   <motion.button
                     whileHover={{
-                      scale: 1.1, // Button scales slightly on hover
+                      scale: 1.01, // Button scales slightly on hover
                     }}
                     className="remove-item-btn"
                     onClick={() => handleRemoveFromCart(item.productId)} // Call backend API to remove item
@@ -149,9 +150,6 @@ const Cart = () => {
           <div className="cart-footer">
             <h3>Total: ₹{calculateTotal()}</h3>
             <motion.button
-              whileHover={{
-                scale: 1.1, // Slightly scale up on hover
-              }}
               className="checkout-btn"
               onClick={() => navigate("/checkout")}
             >
@@ -160,6 +158,7 @@ const Cart = () => {
           </div>
         )}
       </div>
+      <Footer />
     </>
   );
 };

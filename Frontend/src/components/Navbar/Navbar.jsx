@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 import "./Navbar.css";
 
 const Navbar = () => {
-  const { isAuthenticated, logout, setCart } = useContext(GlobalContext);
+  const { isAuthenticated, logout, setCart, cart } = useContext(GlobalContext); // Added `cart`
   const isLogged = isAuthenticated();
   const navigate = useNavigate();
 
@@ -55,9 +55,14 @@ const Navbar = () => {
         animate="visible"
         variants={navbarItemVariants}
       >
-        <button onClick={() => navigate("/cart")} className="cart-button">
-          <FaCartShopping />
-        </button>
+        <div className="nav-cart-container">
+          <button onClick={() => navigate("/cart")} className="cart-button">
+            <FaCartShopping />
+            {cart.length > 0 && (
+              <span className="cart-badge">{cart.length}</span>
+            )}
+          </button>
+        </div>
         {isLogged && (
           <button
             className="logout-button"

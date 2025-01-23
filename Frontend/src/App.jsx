@@ -4,6 +4,8 @@ import Home from "./pages/Home/Home";
 import Products from "./pages/Products/Products";
 import Login from "./pages/Login/Login";
 import Checkout from "./pages/CheckOut/CheckOut";
+import AboutUs from "./pages/AboutUs/AboutUs";
+import Contact from "./pages/Contact/Contact";
 import ProtectedRoute from "./components/protectedRoute";
 import Cart from "./pages/Cart/Cart";
 import { ToastContainer } from "react-toastify"; // Import ToastContainer
@@ -17,6 +19,8 @@ const App = () => {
           <Route path="/login" element={<Login />} />
 
           <Route path="/admin/add-product" element={<AdminAddProduct />} />
+          <Route path="/about-us" element={<AboutUs />} />
+          <Route path="/contact" element={<Contact />} />
 
           <Route
             path="/"

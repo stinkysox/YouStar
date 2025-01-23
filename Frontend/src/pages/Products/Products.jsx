@@ -2,18 +2,17 @@ import React, { useContext, useState, useEffect } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import { useParams } from "react-router-dom";
 import { GlobalContext } from "../../context/GlobalContext";
-import axios from "axios"; // Import axios for API calls
-import { motion } from "framer-motion"; // Import motion from Framer Motion
-import { DotLoader } from "react-spinners"; // Import DotLoader from react-spinners
+import axios from "axios";
+import { motion } from "framer-motion";
+import { DotLoader } from "react-spinners";
 import "./Products.css";
 
 const Products = () => {
   const { category } = useParams();
-  const { user, isAuthenticated } = useContext(GlobalContext); // Get user and authentication status
-  const [cart, setCart] = useState([]); // Local cart state, can be synced with the backend later
-  const [products, setProducts] = useState([]); // State to store fetched products
-  const [loading, setLoading] = useState(true); // Loading state for API call
-  const [error, setError] = useState(""); // Error state for handling any API errors
+  const { user, isAuthenticated, setCart } = useContext(GlobalContext);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -25,7 +24,7 @@ const Products = () => {
         setLoading(false);
         console.log(products);
       } catch (error) {
-        setError("Failed to fetch products"); // Handle any errors during the fetch
+        setError("Failed to fetch products");
         setLoading(false);
       }
     };
@@ -61,11 +60,11 @@ const Products = () => {
       <div className="loader-container">
         <DotLoader color="#888" size={50} />
       </div>
-    ); // Show DotLoader from react-spinners while fetching
+    );
   }
 
   if (error) {
-    return <div>{error}</div>; // Show error message if there's an issue with the API call
+    return <div>{error}</div>;
   }
 
   return (
@@ -80,14 +79,14 @@ const Products = () => {
               className="product-item"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }} // Smooth transition
+              transition={{ duration: 0.5 }}
               whileHover={{
-                boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.2)", // Add shadow on hover
-                transition: { duration: 0.3 }, // Smooth transition for shadow effect
+                boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.2)",
+                transition: { duration: 0.3 },
               }}
               whileTap={{
-                boxShadow: "0px 5px 10px rgba(0, 0, 0, 0.15)", // Smaller shadow on tap
-                transition: { duration: 0.2 }, // Smooth transition for shadow effect
+                boxShadow: "0px 5px 10px rgba(0, 0, 0, 0.15)",
+                transition: { duration: 0.2 },
               }}
             >
               <img src={product.image} alt={product.name} />

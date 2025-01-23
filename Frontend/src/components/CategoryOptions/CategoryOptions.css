@@ -6,6 +6,7 @@
   grid-template-columns: repeat(2, 1fr);
   gap: 20px;
   margin-top: 8%;
+  padding-left: 0px;
 }
 
 .category-options li {

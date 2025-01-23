@@ -1,0 +1,138 @@
+.contact-us-container {
+  min-height: 100vh;
+  padding: 20px;
+  background-color: black;
+  font-family: "Courier New", Courier, monospace !important;
+}
+
+.contact-nav {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.contact-nav h3 {
+  color: #fff;
+  font-size: 26px;
+  margin-top: 0px;
+}
+
+.contact-nav-image {
+  width: 110px;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+/* Content Layout */
+.contact-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.contact-text,
+.contact-form {
+  padding: 20px;
+  font-family: "Courier New", Courier, monospace;
+  color: white;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 500px;
+}
+
+.contact-text p {
+  font-size: 14px;
+  margin-bottom: 20px;
+  font-family: "Courier New", Courier, monospace !important;
+}
+
+.contact-info h3 {
+  font-size: 22px;
+  font-family: "Courier New", Courier, monospace;
+
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.contact-info p {
+  font-family: "Courier New", Courier, monospace;
+
+  font-size: 14px;
+}
+
+/* Contact Form Styles */
+.contact-form-group {
+  margin-bottom: 15px;
+}
+
+.contact-form-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: "Courier New", Courier, monospace;
+  color: white;
+  margin-bottom: 8px;
+}
+
+.contact-form-group input,
+.contact-form-group textarea {
+  width: 100%;
+  padding: 12px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: black;
+  color: #fff;
+}
+
+.contact-form-group input:focus,
+.contact-form-group textarea:focus {
+  outline: none;
+}
+
+.contact-button {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  font-family: "Courier New", Courier, monospace;
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #010101;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .contact-text,
+  .contact-form {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .contact-nav h3 {
+    font-size: 28px;
+  }
+
+  .contact-text h2 {
+    font-size: 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-nav-image {
+    width: 120px;
+  }
+
+  .contact-text h2 {
+    font-size: 28px;
+  }
+
+  .contact-info h3 {
+    font-size: 18px;
+  }
+}

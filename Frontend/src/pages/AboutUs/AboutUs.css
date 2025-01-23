@@ -1,0 +1,136 @@
+.about-us-bg-container {
+  background-color: black;
+  min-height: 100vh;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  padding-bottom: 0px;
+}
+
+.about-text-container p {
+  color: white;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 12px;
+}
+
+.about-nav {
+  text-align: center;
+}
+
+.about-nav h3 {
+  color: white;
+  margin-top: 0px;
+}
+
+.about-nav-image {
+  height: 110px;
+  cursor: pointer;
+}
+
+.about-us-image {
+  height: 200px;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.about-text-image-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 90%;
+  padding: 10px;
+  height: 70vh;
+  margin: auto;
+  overflow: hidden; /* Prevent overflow during animation */
+}
+
+.about-text-container,
+.about-image-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+  opacity: 0; /* Initially hidden */
+  animation-duration: 1s;
+  animation-fill-mode: forwards; /* Ensure the final position is retained */
+}
+
+.about-text-container {
+  animation-name: slide-in-top;
+}
+
+.about-image-container {
+  animation-name: slide-in-bottom;
+}
+
+/* Keyframes for default animations */
+@keyframes slide-in-top {
+  from {
+    transform: translateY(-100%); /* Slide from the top */
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0); /* Final position */
+    opacity: 1;
+  }
+}
+
+@keyframes slide-in-bottom {
+  from {
+    transform: translateY(100%); /* Slide from the bottom */
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0); /* Final position */
+    opacity: 1;
+  }
+}
+
+/* Media query for smaller screens */
+@media only screen and (max-width: 480px) {
+  .about-text-container p {
+    font-size: 10px;
+    padding: 10px;
+  }
+
+  .about-text-image-container {
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .about-text-image-container > div {
+    width: 100%;
+  }
+
+  .about-text-container {
+    animation-name: slide-in-left;
+  }
+
+  .about-image-container {
+    animation-name: slide-in-right;
+  }
+
+  /* Keyframes for smaller screens */
+  @keyframes slide-in-left {
+    from {
+      transform: translateX(-100%); /* Slide from the left */
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0); /* Final position */
+      opacity: 1;
+    }
+  }
+
+  @keyframes slide-in-right {
+    from {
+      transform: translateX(100%); /* Slide from the right */
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0); /* Final position */
+      opacity: 1;
+    }
+  }
+}
